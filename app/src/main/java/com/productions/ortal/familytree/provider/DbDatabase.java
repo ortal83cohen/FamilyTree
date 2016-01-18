@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbDatabase extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 100;
+    private static final int DATABASE_VERSION = 105;
     // Database Name
     private static final String DATABASE_NAME = "familyTreeDB";
 
@@ -33,28 +33,15 @@ public class DbDatabase extends SQLiteOpenHelper {
                 DbContract.PersonColumns.LAST_NAME + " STRING , " +
                 " PRIMARY KEY (" + DbContract.PersonColumns.KEY_ID + ") ) ";
 
-//        String CREATE_FAMILY_TABLE = "CREATE TABLE IF NOT EXISTS " + DbContract.Tables.TABLE_FAMILY + " ( " +
-//                DbContract.FamilyColumns.LOCATION_NAME + " STRING ," +
-//                DbContract.FamilyColumns.LAT + " STRING ," +
-//                DbContract.FamilyColumns.LON + " STRING ," +
-//                DbContract.FamilyColumns.NORTHEAST_LAT + " STRING," +
-//                DbContract.FamilyColumns.NORTHEAST_LON + " STRING," +
-//                DbContract.FamilyColumns.SOUTHWEST_LAT + " STRING," +
-//                DbContract.FamilyColumns.SOUTHWEST_LON + " STRING," +
-//                DbContract.FamilyColumns.TYPES + " STRING," +
-//                DbContract.FamilyColumns.NUMBER_GUESTS + " STRING ," +
-//                DbContract.FamilyColumns.NUMBER_ROOMS + " STRING ," +
-//                DbContract.FamilyColumns.FROM_DATE + " STRING ," +
-//                DbContract.FamilyColumns.TO_DATE + " STRING," +
-//                DbContract.FamilyColumns.CREATE_AT + " TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
-//                " PRIMARY KEY (" + DbContract.FamilyColumns.LOCATION_NAME + "," + DbContract.FamilyColumns.NUMBER_GUESTS + ","
-//                + DbContract.FamilyColumns.NUMBER_ROOMS + "," + DbContract.FamilyColumns.FROM_DATE + "," +
-//                DbContract.FamilyColumns.TO_DATE + ")  )";
+        String CREATE_FAMILY_TABLE = "CREATE TABLE IF NOT EXISTS " + DbContract.Tables.TABLE_FAMILY + " ( " +
+                DbContract.FamilyColumns.ID1 + " STRING ," +
+                DbContract.FamilyColumns.ID2 + " STRING ," +
+                DbContract.FamilyColumns.RELATIONS + " STRING )";
 
 
         // create Hotels table
         db.execSQL(CREATE_PERSON_TABLE);
-//        db.execSQL(CREATE_FAMILY_TABLE);
+        db.execSQL(CREATE_FAMILY_TABLE);
     }
 
     @Override

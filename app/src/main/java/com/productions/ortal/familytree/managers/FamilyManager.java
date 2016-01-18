@@ -7,6 +7,8 @@ import android.database.Cursor;
 import com.productions.ortal.familytree.models.Person;
 import com.productions.ortal.familytree.provider.DbContract;
 
+import java.util.ArrayList;
+
 /**
  * Created by user on 1/18/2016.
  */
@@ -25,18 +27,17 @@ public class FamilyManager {
         mContext.getContentResolver().insert(DbContract.Person.CONTENT_URI, values);
     }
 
-    public String getPersons() {
-        String x = "";
+    public ArrayList<Person> getPersons() {
+        ArrayList<Person> persons = new ArrayList();
         Cursor cursor = mContext.getContentResolver().query(DbContract.Person.CONTENT_URI.buildUpon().build(), null, null, null, null);
         if (cursor != null && cursor.getCount() != 0) {
             cursor.moveToFirst();
             do {
-                x = x.concat(cursor.getString(cursor.getColumnIndex(DbContract.PersonColumns.FIRST_NAME)) +
-                        cursor.getString(cursor.getColumnIndex(DbContract.PersonColumns.LAST_NAME)));
-
+                persons.add(new Person(cursor.getString(cursor.getColumnIndex(DbContract.PersonColumns.FIRST_NAME)),
+                        cursor.getString(cursor.getColumnIndex(DbContract.PersonColumns.LAST_NAME))));
             } while (cursor.moveToNext());
         }
         cursor.close();
-        return x;
+        return persons;
     }
 }

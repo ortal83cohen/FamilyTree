@@ -115,7 +115,7 @@ public class DbProvider extends ContentProvider {
                         values.getAsString(DbContract.PersonColumns.LAST_NAME));
             case FAMILY:
                 db.insert(DbContract.Tables.TABLE_FAMILY, null, values);
-                return DbContract.Family.buildSearchHistoryUri(values.getAsString(DbContract.FamilyColumns.ID));
+                return DbContract.Family.buildSearchHistoryUri(values.getAsString(DbContract.FamilyColumns.ID1));
             default: {
                 throw new UnsupportedOperationException("Unknown insert uri: " + uri);
             }

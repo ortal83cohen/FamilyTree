@@ -7,10 +7,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
+import com.productions.ortal.familytree.customViews.PersonView;
 import com.productions.ortal.familytree.managers.FamilyManager;
 import com.productions.ortal.familytree.models.Person;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements AddPersonFragment.Listener {
     private static final String FRAGMENT_ADD_PERSON = "add_person";
@@ -26,22 +29,50 @@ public class MainActivity extends AppCompatActivity implements AddPersonFragment
         mFamilyManager = new FamilyManager(this);
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mFab.setVisibility(View.GONE);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, AddPersonFragment.newInstance(),
-                                FRAGMENT_ADD_PERSON)
-                        .commit();
-            }
-        });
 
+        if (!drawTree()) { //if the tree is empty show the "add button"
+            mFab.setVisibility(View.VISIBLE);
+            mFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mFab.setVisibility(View.GONE);
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, AddPersonFragment.newInstance(0),
+                                    FRAGMENT_ADD_PERSON)
+                            .commit();
+                }
+            });
+        }
 
-        String x = mFamilyManager.getPersons();
+    }
 
-        Toast.makeText(this, x, Toast.LENGTH_LONG).show();
+    private boolean drawTree() {
+        ArrayList<Person> persons = mFamilyManager.getPersons();
+        if (persons.size() == 0) { // there is no data
+            return false;
+        }
+        LinearLayout treeView = (LinearLayout) findViewById(R.id.tree_view);
+
+        treeView.removeAllViews();
+        for (Person person : persons) { // for each person draw costume view
+
+            PersonView personView = new PersonView(this, person);
+            final int id = person.getId();
+            personView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, AddPersonFragment.newInstance(id),
+                                    FRAGMENT_ADD_PERSON)
+                            .commit();
+                }
+            });
+            treeView.addView(personView);
+
+        }
+        return true;
     }
 
     @Override
@@ -53,27 +84,19 @@ public class MainActivity extends AppCompatActivity implements AddPersonFragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void addPerson(Person person) {
-        mFab.setVisibility(View.VISIBLE);
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .remove(getSupportFragmentManager().findFragmentByTag(FRAGMENT_ADD_PERSON))
                 .commit();
 
         mFamilyManager.addFamilyMember(person);
+        drawTree();
     }
+
 }

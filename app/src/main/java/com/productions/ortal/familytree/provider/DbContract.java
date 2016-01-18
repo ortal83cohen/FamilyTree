@@ -27,7 +27,10 @@ public class DbContract {
     }
 
     public interface FamilyColumns {
-        String ID = "id";
+        String ID1 = "id1";
+        String ID2 = "id2";
+        String RELATIONS = "relations";
+
     }
 
     public static class Person implements PersonColumns, BaseColumns {

@@ -10,21 +10,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.productions.ortal.familytree.models.Person;
 
 
 public class AddPersonFragment extends Fragment {
+    private static final String REFERENCE = "reference";
     View mView;
     private Listener mListener;
+    private int mReference;
 
     public AddPersonFragment() {
     }
 
-    public static AddPersonFragment newInstance() {
+    public static AddPersonFragment newInstance(int Reference) {
         AddPersonFragment fragment = new AddPersonFragment();
         Bundle args = new Bundle();
-//        args.putParcelable(ARG_REQUEST, request);
+        args.putInt(REFERENCE, Reference);
         fragment.setArguments(args);
         return fragment;
     }
@@ -33,12 +37,35 @@ public class AddPersonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        return mView = inflater.inflate(R.layout.fragment_add_person, container, false);
+        if (savedInstanceState != null) {
+            mReference = savedInstanceState.getInt(REFERENCE);
+        } else {
+            mReference = getArguments().getInt(REFERENCE);
+        }
+        mView = inflater.inflate(R.layout.fragment_add_person, container, false);
+
+
+        Spinner relative = (Spinner) mView.findViewById(R.id.relative);
+        if (mReference != 0) { //if there is reference
+            String[] list = new String[]{"son", "couple"};
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
+            relative.setAdapter(adapter);
+        } else {
+            relative.setVisibility(View.GONE);
+        }
+        return mView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(REFERENCE, mReference);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        menu.clear();
         inflater.inflate(R.menu.menu_add_person, menu);
 //        super.onCreateOptionsMenu(menu, inflater);
     }
@@ -64,10 +91,11 @@ public class AddPersonFragment extends Fragment {
 
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //on click on save button
         if (id == R.id.submit) {
             AppCompatEditText firstName = (AppCompatEditText) mView.findViewById(R.id.first_name);
             AppCompatEditText lastName = (AppCompatEditText) mView.findViewById(R.id.last_name);
+            Spinner relative = (Spinner) mView.findViewById(R.id.relative);//todo
             mListener.addPerson(new Person(firstName.getText().toString(), lastName.getText().toString()));
             return true;
         }
