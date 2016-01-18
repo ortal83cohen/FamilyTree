@@ -1,0 +1,35 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/page_margin"
+        android:orientation="vertical"
+        tools:context="com.productions.ortal.familytree.MainActivityFragment"
+        tools:showIn="@layout/activity_main">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/first_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First name"
+            android:nextFocusDown="@+id/last_name"
+            android:singleLine="true" />
+
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/last_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="Last name"
+            android:singleLine="true" />
+
+
+    </LinearLayout>
+</FrameLayout>
