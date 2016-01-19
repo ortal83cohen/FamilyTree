@@ -13,11 +13,11 @@ public class DbContract {
     public static final String CONTENT_AUTHORITY = "com.productions.ortal.familytree.provider";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     private static final String PATH_PERSON = "person";
-    private static final String PATH_FAMILY = "family";
+    private static final String PATH_RELATIONS = "relations";
 
     interface Tables {
         String TABLE_PERSON = "tbl_person";
-        String TABLE_FAMILY = "tbl_family";
+        String TABLE_RELATIONS = "tbl_relations";
     }
 
     public interface PersonColumns {
@@ -26,10 +26,10 @@ public class DbContract {
         String LAST_NAME = "last_name";
     }
 
-    public interface FamilyColumns {
+    public interface RelationsColumns {
         String ID1 = "id1";
         String ID2 = "id2";
-        String RELATIONS = "relations";
+        String RELATIVE = "relative";
 
     }
 
@@ -38,8 +38,8 @@ public class DbContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PERSON).build();
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/int";
 
-        public static Uri buildPersonUri(String firstName, String lastNAme) {
-            return CONTENT_URI.buildUpon().appendPath(firstName).appendPath(lastNAme).build();
+        public static Uri buildPersonUri(String id,String firstName, String lastNAme) {
+            return CONTENT_URI.buildUpon().appendPath(id).appendPath(firstName).appendPath(lastNAme).build();
         }
 
         public static String getHotelId(Uri uri) {
@@ -47,9 +47,9 @@ public class DbContract {
         }
     }
 
-    public static class Family implements FamilyColumns, BaseColumns {
+    public static class Relations implements RelationsColumns, BaseColumns {
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAMILY).build();
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_RELATIONS).build();
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/int";
 
         public static Uri buildSearchHistoryUri(String id) {

@@ -4,7 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="page_margin">32dp</dimen>
-    <dimen name="person_box">64dp</dimen>
+    <dimen name="person_box_height">100dp</dimen>
+    <dimen name="person_box_width">200dp</dimen>
     <dimen name="person_margin">16dp</dimen>
     <dimen name="person_padding">8dp</dimen>
 </resources>

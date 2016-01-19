@@ -6,10 +6,16 @@ package com.productions.ortal.familytree.models;
 public class Person {
     private String firstName;
     private String lastName;
+    private int id;
 
-    public Person(String firstName, String lastName) {
+    public Person(String firstName, String lastName, int id) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.id = id;//id = 0 means no id yet
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -29,6 +35,6 @@ public class Person {
     }
 
     public int getId() {
-        return 10;
+        return id;
     }
 }

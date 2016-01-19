@@ -21,7 +21,7 @@ import java.util.ArrayList;
  */
 public class DbProvider extends ContentProvider {
     private static final int PERSON = 100;
-    private static final int FAMILY = 200;
+    private static final int RELATIONS = 200;
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private DbDatabase mOpenHelper;
 
@@ -29,7 +29,7 @@ public class DbProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = DbContract.CONTENT_AUTHORITY;
         matcher.addURI(authority, "person", PERSON);
-        matcher.addURI(authority, "family", FAMILY);
+        matcher.addURI(authority, "relations", RELATIONS);
         return matcher;
     }
 
@@ -52,8 +52,8 @@ public class DbProvider extends ContentProvider {
         switch (match) {
             case PERSON:
                 return DbContract.Person.CONTENT_TYPE;
-            case FAMILY:
-                return DbContract.Family.CONTENT_TYPE;
+            case RELATIONS:
+                return DbContract.Relations.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -68,17 +68,9 @@ public class DbProvider extends ContentProvider {
         switch (match) {
             case PERSON:
                 builder.table(DbContract.Tables.TABLE_PERSON);
-                if (uri.getQueryParameter("group by") != null) {
-                    return builder.groupBy(uri.getQueryParameter("group by")).query(db, false, getFavoritesGroupByColumns(), "", "");
-                } else if (uri.getQueryParameter("where") != null) {
-                    return builder.where(uri.getQueryParameter("where")).query(db, false, projection, "", "");
-                } else {
                     return builder.query(db, false, projection, "", "");
-                }
-
-            case FAMILY:
-                final String hotelId = DbContract.Person.getHotelId(uri);
-                builder.table(DbContract.Tables.TABLE_FAMILY);
+            case RELATIONS:
+                builder.table(DbContract.Tables.TABLE_RELATIONS);
                 return builder.query(db, false, projection, "", "");
             default: {
                 throw new UnsupportedOperationException("Unknown insert uri: " + uri);
@@ -110,12 +102,12 @@ public class DbProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case PERSON:
-                db.insert(DbContract.Tables.TABLE_PERSON, null, values);
+                long id = db.insert(DbContract.Tables.TABLE_PERSON, null, values);
                 return DbContract.Person.buildPersonUri(values.getAsString(DbContract.PersonColumns.FIRST_NAME),
-                        values.getAsString(DbContract.PersonColumns.LAST_NAME));
-            case FAMILY:
-                db.insert(DbContract.Tables.TABLE_FAMILY, null, values);
-                return DbContract.Family.buildSearchHistoryUri(values.getAsString(DbContract.FamilyColumns.ID1));
+                        values.getAsString(DbContract.PersonColumns.LAST_NAME),String.valueOf(id));
+            case RELATIONS:
+                db.insert(DbContract.Tables.TABLE_RELATIONS, null, values);
+                return DbContract.Relations.buildSearchHistoryUri(values.getAsString(DbContract.RelationsColumns.ID1));
             default: {
                 throw new UnsupportedOperationException("Unknown insert uri: " + uri);
             }
@@ -143,8 +135,8 @@ public class DbProvider extends ContentProvider {
         if (match == PERSON) {
             builder.table(DbContract.Tables.TABLE_PERSON).where(selection);
         }
-        if (match == FAMILY) {
-            builder.table(DbContract.Tables.TABLE_FAMILY).where(selection);
+        if (match == RELATIONS) {
+            builder.table(DbContract.Tables.TABLE_RELATIONS).where(selection);
         }
         return builder.where(selection, selectionArgs).delete(db);
     }

@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbDatabase extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 105;
+    private static final int DATABASE_VERSION = 109;
     // Database Name
     private static final String DATABASE_NAME = "familyTreeDB";
 
@@ -28,20 +28,19 @@ public class DbDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // SQL statement to create Hotel table
         String CREATE_PERSON_TABLE = "CREATE TABLE IF NOT EXISTS " + DbContract.Tables.TABLE_PERSON + " ( " +
-                DbContract.PersonColumns.KEY_ID + " INTEGER ," +
+                DbContract.PersonColumns.KEY_ID + " INTEGER  PRIMARY KEY AUTOINCREMENT," +
                 DbContract.PersonColumns.FIRST_NAME + " STRING , " +
-                DbContract.PersonColumns.LAST_NAME + " STRING , " +
-                " PRIMARY KEY (" + DbContract.PersonColumns.KEY_ID + ") ) ";
+                DbContract.PersonColumns.LAST_NAME + " STRING ) " ;
 
-        String CREATE_FAMILY_TABLE = "CREATE TABLE IF NOT EXISTS " + DbContract.Tables.TABLE_FAMILY + " ( " +
-                DbContract.FamilyColumns.ID1 + " STRING ," +
-                DbContract.FamilyColumns.ID2 + " STRING ," +
-                DbContract.FamilyColumns.RELATIONS + " STRING )";
+        String CREATE_RELATIONS_TABLE = "CREATE TABLE IF NOT EXISTS " + DbContract.Tables.TABLE_RELATIONS + " ( " +
+                DbContract.RelationsColumns.ID1 + " STRING ," +
+                DbContract.RelationsColumns.ID2 + " STRING ," +
+                DbContract.RelationsColumns.RELATIVE + " STRING )";
 
 
         // create Hotels table
         db.execSQL(CREATE_PERSON_TABLE);
-        db.execSQL(CREATE_FAMILY_TABLE);
+        db.execSQL(CREATE_RELATIONS_TABLE);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class DbDatabase extends SQLiteOpenHelper {
         if (oldVersion != newVersion) {
 
             db.execSQL("DROP TABLE IF EXISTS " + DbContract.Tables.TABLE_PERSON);
-            db.execSQL("DROP TABLE IF EXISTS " + DbContract.Tables.TABLE_FAMILY);
+            db.execSQL("DROP TABLE IF EXISTS " + DbContract.Tables.TABLE_RELATIONS);
 
         }
         this.onCreate(db);

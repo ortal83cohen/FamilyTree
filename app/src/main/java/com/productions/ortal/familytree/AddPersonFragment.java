@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.productions.ortal.familytree.managers.RelationsManager;
 import com.productions.ortal.familytree.models.Person;
 
 
@@ -46,12 +47,12 @@ public class AddPersonFragment extends Fragment {
 
 
         Spinner relative = (Spinner) mView.findViewById(R.id.relative);
-        if (mReference != 0) { //if there is reference
-            String[] list = new String[]{"son", "couple"};
+        if (mReference != 0) { //if there is reference = if this is not the first person
+            String[] list = new String[]{RelationsManager.RELATIONS_SON, RelationsManager.RELATIONS_COUPLE};//for now we have only 2 options
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, list);
             relative.setAdapter(adapter);
         } else {
-            relative.setVisibility(View.GONE);
+            relative.setVisibility(View.GONE); // first person have no relative
         }
         return mView;
     }
@@ -67,7 +68,6 @@ public class AddPersonFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_add_person, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -95,8 +95,9 @@ public class AddPersonFragment extends Fragment {
         if (id == R.id.submit) {
             AppCompatEditText firstName = (AppCompatEditText) mView.findViewById(R.id.first_name);
             AppCompatEditText lastName = (AppCompatEditText) mView.findViewById(R.id.last_name);
-            Spinner relative = (Spinner) mView.findViewById(R.id.relative);//todo
-            mListener.addPerson(new Person(firstName.getText().toString(), lastName.getText().toString()));
+            Spinner relative = (Spinner) mView.findViewById(R.id.relative);
+            String relativeId = relative.getSelectedItem() != null ? relative.getSelectedItem().toString() : "";//if this is the first person, there will be no relative
+            mListener.addPerson(new Person(firstName.getText().toString(), lastName.getText().toString(), 0), relativeId, mReference);
             return true;
         }
 
@@ -104,6 +105,6 @@ public class AddPersonFragment extends Fragment {
     }
 
     public interface Listener {
-        void addPerson(Person person);
+        void addPerson(Person person, String relative, int referenceToPerson);
     }
 }
